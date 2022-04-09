@@ -9,16 +9,6 @@
         "id": 42,
         "name": "Arsenal"
     },
-    "65":
-    {
-        "id": 65,
-        "name": "Nottingham"
-    },
-    "45":
-    {
-        "id": 45,
-        "name": "Everton"
-    },
     "34":
     {
         "id": 34,
@@ -58,5 +48,65 @@
     {
         "id": 47,
         "name": "Tottenham"
+    },
+    "35":
+    {
+        "id": 35,
+        "name": "Bournemouth"
+    },
+    "51":
+    {
+        "id": 51,
+        "name": "Brighton"
+    },
+    "44":
+    {
+        "id": 44,
+        "name": "Burnley"
+    },
+    "45":
+    {
+        "id": 45,
+        "name": "Everton"
+    },
+    "48":
+    {
+        "id": 48,
+        "name": "West Ham"
+    },
+    "49":
+    {
+        "id": 49,
+        "name": "Chelsea"
+    },
+    "50":
+    {
+        "id": 50,
+        "name": "Manchester City"
+    },
+    "52":
+    {
+        "id": 52,
+        "name": "Crystal Palace"
+    },
+    "55":
+    {
+        "id": 55,
+        "name": "Brentford"
+    },
+    "62":
+    {
+        "id": 62,
+        "name": "Sheffield Utd"
+    },
+    "66":
+    {
+        "id": 66,
+        "name": "Aston Villa"
+    },
+    "71":
+    {
+        "id": 71,
+        "name": "Norwich"
     }
 }
