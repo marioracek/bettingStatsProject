@@ -49,7 +49,7 @@ public class Helper {
     }
 
     //vrati pole statistik pre dany team a dany zapas
-    public static JSONArray getFixtureStatistics(int teamId, int fixtureId) throws IOException {
+    public static JSONArray  getFixtureStatistics(int teamId, int fixtureId) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder().url("https://v3.football.api-sports.io/fixtures/statistics?fixture=" + fixtureId + "&team=" + teamId + "").get().addHeader("x-apisports-key", "86d7d994c59c862221c9118242fc4808").build();
         Response response = client.newCall(request).execute();
@@ -124,5 +124,25 @@ public class Helper {
         JSONObject responseObj = new JSONObject(responseBody);
 
         return responseObj.getJSONArray("response");
+    }
+
+    //
+    public static JSONArray getTeamFixturesByTablePosition(int teamId, JSONArray fixtures, List<Integer> listOfTeams) {
+        JSONArray opponentsIds = new JSONArray();
+        int opponent = 0;
+
+        for (int i = 0; i < fixtures.length(); i++) {
+            if (fixtures.getJSONObject(i).getJSONObject("teams").getJSONObject("home").getInt("id") == teamId) {
+                opponent = fixtures.getJSONObject(i).getJSONObject("teams").getJSONObject("away").getInt("id");
+            } else {
+                opponent = fixtures.getJSONObject(i).getJSONObject("teams").getJSONObject("home").getInt("id");
+            }
+
+            if (listOfTeams.contains(opponent)) {
+                opponentsIds.put(fixtures.getJSONObject(i));
+            }
+        }
+
+        return opponentsIds;
     }
 }

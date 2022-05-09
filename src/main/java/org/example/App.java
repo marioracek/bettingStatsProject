@@ -24,20 +24,24 @@ public class App {
 
     public static final int SEASON_2021 = 2021;
 
+    static List<Integer> bigSix = Arrays.asList(40, 42, 33, 47, 49, 50);
 
     public static void main(String[] args) throws IOException {
         //TODO prekladac na ligy podobne ako mam teamy
         //TODO skusit inkorporovat pocet a mena zranenych hracov
         //TODO skusit vypisovat kolko zapasov vyhral/prehral dany team
         //TODO urobit filter proti roznym kategoriam teamu (big 4, last 5, middle table)
-
-        getHeadToHeadStatistics(40, 50, 4);
-
-        getAverageCornerKicksAgainstTeam(40, SEASON_2021, PREMIER_LEAGUE, getNumberOfTeamsMatches(40, SEASON_2021, PREMIER_LEAGUE));
+        //TODO vypisovat kolko rohov dava dany team doma a kolko vonku
 
         // if league is 0 then it means that all leagues are counted in
-        getAverageStatisticsByTeam(40, SEASON_2021, PREMIER_LEAGUE, getNumberOfTeamsMatches(40, SEASON_2021, PREMIER_LEAGUE));
 
+        JSONArray teamFixtures = getTeamFixtures(39, 2021, PREMIER_LEAGUE, getNumberOfTeamsMatches(39, 2021, PREMIER_LEAGUE));
+        //JSONArray teamFixturesBigSix = getTeamFixturesByTablePosition(40, getTeamFixtures(40, 2021, 39, getNumberOfTeamsMatches(40, 2021, 39)), bigSix);
+
+        getAverageStatisticsByTeam(39, 2021, PREMIER_LEAGUE, teamFixtures.length(), teamFixtures);
+        getAverageStatisticsAgainstTeam(44, SEASON_2021, PREMIER_LEAGUE, getNumberOfTeamsMatches(44, SEASON_2021, PREMIER_LEAGUE));
+
+        getHeadToHeadStatistics(39, 44, 4);
 
     }
 
@@ -60,9 +64,11 @@ public class App {
             statisticsTeamTwo.add(getFixtureStatistics(teamTwo, integer));
         }
 
-        System.out.println("Statistiky teamu: " + getTeamName(String.valueOf(teamOne)));
-        for (int i = 0; i < numberOfMatches; i++) {
+        System.out.println(statisticsTeamOne);
 
+        System.out.println("Statistiky teamu: " + getTeamName(String.valueOf(teamOne)));
+
+        for (int i = 0; i < numberOfMatches; i++) {
             System.out.println("Strely: " + statisticsTeamOne.get(i).getJSONObject(2).getDouble("value"));
             if (statisticsTeamOne.get(i).getJSONObject(7).isNull("value")) {
                 System.out.println("Rohy: 0");
@@ -107,13 +113,12 @@ public class App {
         System.out.println("\n");
     }
 
-    public static void getAverageStatisticsByTeam(int teamId, int season, int league, int numberOfMatches) throws IOException {
+    public static void getAverageStatisticsByTeam(int teamId, int season, int league, int numberOfMatches, JSONArray teamFixtures) throws IOException {
         int counter = 0;
         double cornerKicks = 0;
         double shots = 0;
         DecimalFormat df = new DecimalFormat("###.##");
 
-        JSONArray teamFixtures = getTeamFixtures(teamId, season, league, numberOfMatches);
         List<Integer> opponents = getTeamsIds(teamFixtures, numberOfMatches);
         List<Integer> fixtureIds = getFixtureIds(teamFixtures, numberOfMatches);
         List<JSONArray> statistics = new ArrayList<>();
@@ -137,7 +142,14 @@ public class App {
             System.out.println("Home or away: " + homeOrAway.get(i));
             System.out.println("Proti teamu: " + getTeamName(String.valueOf(opponents.get(i))));
 
-            System.out.println("Strely: " + statistics.get(i).getJSONObject(2).getDouble("value"));
+            if (statistics.get(i).getJSONObject(2).isNull("value")) {
+                System.out.println("Strely: 0");
+                shots += 0;
+            } else {
+                System.out.println("Strely: " + statistics.get(i).getJSONObject(2).getDouble("value"));
+                shots += statistics.get(i).getJSONObject(2).getDouble("value");
+            }
+
             if (statistics.get(i).getJSONObject(7).isNull("value")) {
                 System.out.println("Rohy: 0");
                 System.out.println("\n");
@@ -147,7 +159,7 @@ public class App {
                 System.out.println("\n");
                 cornerKicks += statistics.get(i).getJSONObject(7).getDouble("value");
             }
-            shots += statistics.get(i).getJSONObject(2).getDouble("value");
+
 
             if (counter == 5) {
                 double averageCornersAfterFive = Double.parseDouble(df.format(cornerKicks / 5));
@@ -179,7 +191,7 @@ public class App {
         System.out.println("\n");
     }
 
-    public static void getAverageCornerKicksAgainstTeam(int teamId, int season, int league, int numberOfMatches) throws IOException {
+    public static void getAverageStatisticsAgainstTeam(int teamId, int season, int league, int numberOfMatches) throws IOException {
         int counter = 0;
         double cornerKicks = 0;
         double shots = 0;
